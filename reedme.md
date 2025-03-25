@@ -1,5 +1,5 @@
 # Reedme
 
-## Docker Build
+A demo application for experimentation using ASP.NET Core MVC.
 
-`docker buildx build --platform linux/amd64 -t aguedoaslanta/demo-mvc:v0.1 --push .`
+The app is running in [https://mvc.aguedo.com](https://mvc.aguedo.com).
