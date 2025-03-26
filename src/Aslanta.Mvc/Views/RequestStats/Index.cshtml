@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Stats";
+    IOrderedEnumerable<KeyValuePair<string, int>> sortedPaths = ViewBag.RequestStats;
+    int tableRow = 1;
+}
+
+
+<div>
+    <p class="fw-lighter">* These stats are stored in memory, they reset every time the app is restarted.</p>
+    <table class="table table-striped table-hover">
+        <thead class="table-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Path</th>
+                <th scope="col">Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (KeyValuePair<string, int> path in sortedPaths)
+            {
+                <tr>
+                    <td scope="row">@(tableRow++)</td>
+                    <td>@path.Key</td>
+                    <td>@path.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
