@@ -19,5 +19,161 @@
 
 <!-- Inline script with type="text/babel" so Babel transpiles it. -->
 <script type="text/babel">
+    const { useState, useReducer } = React;
 
+    function DynamicFormsApp(props) {
+        const [entityTypeHeader, setEntityTypeName] = useState({ name: "" });
+        const [fields, setFields] = useState([
+            { name: "", type: "", id: "1" }]);
+
+        return (
+            <div className="dynamic-forms-app">
+                <h4>Dynamic Form</h4>
+                <EntityType entityTypeHeader={entityTypeHeader} fields={fields}
+                    onEntityTypeNameChange={setEntityTypeName}
+                    onFieldsChange={setFields} />
+                <DynamicInstance entityTypeHeader={entityTypeHeader} fields={fields} />
+            </div>
+        );
+    }
+
+    function EntityType({ entityTypeHeader, fields, onEntityTypeNameChange, onFieldsChange }) {
+        function addField() {
+            const newField = { name: "", type: "", id: crypto.randomUUID() };
+            onFieldsChange([...fields, newField]);
+        }
+
+        function removeField(id) {
+            const newFields = fields.filter(field => field.id !== id);
+            onFieldsChange(newFields);
+        }
+
+        function updateField(field) {
+            const newFields = fields.map((f) => (f.id === field.id ? { ...f, ...field } : f));
+            onFieldsChange(newFields);
+        }
+
+        return (
+            <div className="entity-type">
+                <form>
+                    <div className="form-group col-md-5 mb-4">
+                        <label htmlFor="entityName">Entity Type Name</label>
+                        <input className="form-control" type="text" id="entityName" name="entityName" value={entityTypeHeader.name}
+                            onChange={e => onEntityTypeNameChange({ name: e.target.value })} />
+                    </div>
+
+                    {fields.map((field, index) => (
+                        <EntityField key={index} field={field} onRemoveField={removeField} onUpdateField={updateField} />
+                    ))}
+
+                    <div className="form-group">
+                        <button class="btn btn-outline-primary" type="button" onClick={addField}>Add Field</button>
+                    </div>
+                </form>
+            </div>
+        );
+    }
+
+    function EntityField({ key, field, onRemoveField, onUpdateField }) {
+        const fieldTypeOptions = [
+            { value: "", label: "-- Field Type --" },
+            { value: "text", label: "Text" },
+            { value: "number", label: "Number" },
+            { value: "date", label: "Date" }
+        ];
+
+        const handleFieldNameChange = (value) => {
+            onUpdateField({ ...field, name: value });
+        };
+
+        const handleFieldTypeChange = (value) => {
+            onUpdateField({ ...field, type: value });
+        };
+
+        return (
+            <div className="row mb-3">
+                <div className="col-5">
+                    <input class="form-control" type="text" placeholder="Field Name" value={field.name}
+                        onChange={(e) => handleFieldNameChange(e.target.value)} />
+                </div>
+                <div className="col-5">
+                    <select class="form-control" id={field.name} name={field.name} onChange={(e) => handleFieldTypeChange(e.target.value)}>
+                        {fieldTypeOptions.map((option, index) => (
+                            <option key={index} value={option.value} selected={option.value === field.type}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="col-2">
+                    <button class="btn btn-danger" type="button" onClick={() => onRemoveField(field.id)}>X</button>
+                </div>
+            </div>
+        );
+    }
+
+    function DynamicInstance({ entityTypeHeader, fields }) {
+        const [entities, setEntities] = useState([]);
+        return (
+            <div className="row mt-5">
+                <div className="col-md-6 mb-3">
+                    <DynamicForm entityTypeHeader={entityTypeHeader} fields={fields}
+                        onAddEntity={setEntities} />
+                </div>
+                <div className="col-md-6">
+                    <EntityList entities={entities} />
+                </div>
+            </div>);
+    }
+
+    function DynamicForm({ entityTypeHeader, fields, onAddEntity }) {
+        // This is for demo porposes only. In a real application, you would want to use state to manage the form values.
+        const handleCreate = () => {
+            const newEntity = fields.reduce((acc, field) => {
+                const input = document.getElementById("dynamic-" + field.name);
+                if (input) {
+                    acc[field.name] = input.value;
+                    document.getElementById("dynamic-" + field.name).value = "";
+                }
+                return acc;
+            }, {});
+            onAddEntity(prevEntities => [...prevEntities, newEntity]);
+        };
+
+        return (
+            <div>
+                <h4>New {entityTypeHeader.name}</h4>
+                <form className="form mt-4">
+                    {fields.filter(field => field.name && field.type).map((field, index) => (
+                        <div key={index} className="form-group row mb-3">
+                            <div className="col-4">
+                                <label htmlFor={field.name}>{field.name}</label>
+                            </div>
+                            <div className="col-8">
+                                <input className="form-control" type={field.type} id={"dynamic-" + field.name} name={field.name} />
+                            </div>
+                        </div>
+                    ))}
+                    <button class="btn btn-primary" type="button" onClick={() => handleCreate()}>Create</button>
+                </form>
+            </div>
+        );
+    }
+
+    function EntityList({ entities }) {
+        return (
+            <div>
+                <h4>Entities</h4>
+                <ul>
+                    {entities.map((entity, index) => (
+                        <li key={index}>{JSON.stringify(entity)}</li>
+                    ))}
+                </ul>
+            </div>);
+    }
+
+    ReactDOM.render(
+        <DynamicFormsApp />,
+        document.getElementById('dynamic-forms-div')
+    );
 </script>
