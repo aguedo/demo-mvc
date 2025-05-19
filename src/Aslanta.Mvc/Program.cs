@@ -1,15 +1,27 @@
 using System.Reflection;
+using Aslanta.Mvc;
 using Aslanta.Mvc.RequestStats;
 using Aslanta.Snacks.Interfaces;
 using Aslanta.Snacks.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Load configurations
+var sharedConfigPath = builder.Environment.IsDevelopment()
+    ? "appsettings.shared.json"                      // Local path
+    : "/app/config/appsettings.shared.json";         // K8s path
+builder.Configuration
+    .AddJsonFile(sharedConfigPath, optional: true, reloadOnChange: true);
+builder.Services.Configure<AppSettings>(
+    builder.Configuration.GetSection("AppSettings"));
+
+// Dependency injection
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ISnackService, SnackService>();
 builder.Services.AddSingleton<IRequestStatService, RequestStatService>();
 
+// Swagger configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
