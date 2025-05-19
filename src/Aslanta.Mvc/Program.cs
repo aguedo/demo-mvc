@@ -14,6 +14,8 @@ builder.Configuration
     .AddJsonFile(sharedConfigPath, optional: true, reloadOnChange: true);
 builder.Services.Configure<AppSettings>(
     builder.Configuration.GetSection("AppSettings"));
+builder.Services.Configure<FeatureFlags>(
+    builder.Configuration.GetSection("FeatureFlags"));
 
 // Dependency injection
 builder.Services.AddControllersWithViews();
