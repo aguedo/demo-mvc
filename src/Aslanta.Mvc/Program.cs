@@ -1,8 +1,10 @@
 using System.Reflection;
 using Aslanta.Mvc;
+using Aslanta.Mvc.Applications.DemoFilters;
 using Aslanta.Mvc.RequestStats;
 using Aslanta.Snacks.Interfaces;
 using Aslanta.Snacks.Services;
+using Auth0.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,20 @@ builder.Services.Configure<AppSettings>(
     builder.Configuration.GetSection("AppSettings"));
 builder.Services.Configure<FeatureFlags>(
     builder.Configuration.GetSection("FeatureFlags"));
+
+
+// Sessions
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".Aslanta.Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// Demo filters
+builder.Services.AddScoped<LoggerFilter>();
 
 // Dependency injection
 builder.Services.AddControllersWithViews();
@@ -53,7 +69,7 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = "swagger";
 });
 
-app.UseRequestStatsMiddleware();
+app.UseRequestStatsMiddleware(); // Custom middleware to log request stats
 
 if (!app.Environment.IsDevelopment())
 {
@@ -62,7 +78,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseSession();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
