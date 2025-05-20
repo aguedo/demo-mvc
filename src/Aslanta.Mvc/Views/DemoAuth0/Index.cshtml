@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Demo Auth0";
+}
+
+<div class="text-center">
+    <h3 class="display-4">Demo Auth0</h3>
+</div>
+
+<div>
+    <p>Logged as:</p>
+    <ul>
+        <li>
+            Name: @ViewBag.User.Name
+        </li>
+        <li>
+            Email: @ViewBag.User.EmailAddress
+        </li>
+        <li>
+            Image: <img src="@ViewBag.User.ProfileImage" alt="User Image" />
+        </li>
+    </ul>
+</div>
+
+<div>
+    <a href="~/account/logout">Logout</a>
+</div>
