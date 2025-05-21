@@ -5,6 +5,7 @@ using Aslanta.Mvc.RequestStats;
 using Aslanta.Snacks.Interfaces;
 using Aslanta.Snacks.Services;
 using Auth0.AspNetCore.Authentication;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,11 +21,26 @@ builder.Services.Configure<FeatureFlags>(
     builder.Configuration.GetSection("FeatureFlags"));
 
 // Auth0
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
 builder.Services.AddAuth0WebAppAuthentication(options =>
 {
     options.Domain = builder.Configuration["Auth0:Domain"];
     options.ClientId = builder.Configuration["Auth0:ClientId"];
     options.Scope = "openid profile email";
+});
+
+// Accept the standard headers
+// Needed because we are behind a reverse proxy (nginx) that terminates TLS
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+    options.ForwardLimit = null;
 });
 
 // Sessions
@@ -63,6 +79,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+app.UseForwardedHeaders();
 
 if (!app.Environment.IsDevelopment())
 {
