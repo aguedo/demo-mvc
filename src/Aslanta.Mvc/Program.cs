@@ -56,6 +56,16 @@ builder.Services.AddSession(options =>
 // Demo filters
 builder.Services.AddScoped<LoggerFilter>();
 
+// Demo Output Caching
+builder.Services.AddOutputCache(policy =>
+{
+    policy.AddPolicy("20Secs", builder =>
+    {
+        builder.Expire(TimeSpan.FromSeconds(20));
+    });
+});
+
+
 // Dependency injection
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
@@ -105,6 +115,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseSession();
 
+app.UseOutputCache();
 app.UseAuthentication();
 app.UseAuthorization();
 
