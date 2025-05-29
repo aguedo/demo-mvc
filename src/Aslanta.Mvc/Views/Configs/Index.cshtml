@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Snack";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Configs</h1>
+</div>
+
+<div>
+    <p>Config</p>
+    <ul>
+        <li>
+            <p>Color: @ViewBag.Config.Color</p>
+        </li>
+        <li>
+            <p>Apps</p>
+            <ul>
+                @foreach (AppInstance app in ViewBag.Config.Apps)
+                {
+                    <li>
+                        <p>@app.Name (@app.Version): <a href="@app.Url">@app.Url</a></p>
+                    </li>
+                }
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div>
+    <p>Options Monitor</p>
+    <ul>
+        <li>
+            <p>Color: @ViewBag.OptionsMonitor.Color</p>
+        </li>
+        <li>
+            <p>Apps</p>
+            <ul>
+                @foreach (AppInstance app in ViewBag.OptionsMonitor.Apps)
+                {
+                    <li>
+                        <p>@app.Name (@app.Version): <a href="@app.Url">@app.Url</a></p>
+                    </li>
+                }
+        </li>
+    </ul>
+</div>
+
+<div>
+    <p>Options</p>
+    <ul>
+        <li>
+            <p>Color: @ViewBag.Options.Color</p>
+        </li>
+        <li>
+            <p>Apps</p>
+            <ul>
+                @foreach (AppInstance app in ViewBag.Options.Apps)
+                {
+                    <li>
+                        <p>@app.Name (@app.Version): <a href="@app.Url">@app.Url</a></p>
+                    </li>
+                }
+        </li>
+    </ul>
+</div>
+
+<div>
+    <p>Feature Flags</p>
+    <ul>
+        <li>FeatureX: @ViewBag.FeatureFlags.FeatureX</li>
+        <li>FeatureY: @ViewBag.FeatureFlags.FeatureY</li>
+        <li>FeatureZ: @ViewBag.FeatureFlags.FeatureZ</li>
+    </ul>
+</div>

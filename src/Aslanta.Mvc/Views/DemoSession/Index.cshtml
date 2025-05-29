@@ -1,0 +1,46 @@
+﻿@using Aslanta.Mvc.Applications.DemoSessions
+@model SessionModel
+
+@{
+    ViewData["Title"] = "Demo Session";
+}
+
+<div class="text-center">
+    <h3 class="display-4">Demo Sessions</h3>
+</div>
+
+<div>
+    <ul>
+        <li>
+            Color: @ViewBag.Color
+        </li>
+        <li>
+            Version: @ViewBag.Version
+        </li>
+        <li>
+            Count: @ViewBag.Count
+            <form asp-action="IncreaseCount" method="post">
+                <button type="submit">Increment Counter</button>
+            </form>
+        </li>
+
+    </ul>
+</div>
+
+<div>
+    <form method="post" asp-controller="DemoSession" asp-action="SetSession">
+        <div class="form-group">
+            <label asp-for="Color"></label>
+            <input asp-for="Color" class="form-control" />
+            <span asp-validation-for="Color" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for=" Version"></label>
+            <input asp-for="Version" class="form-control" />
+            <span asp-validation-for="Version" class="text-danger"></span>
+        </div>
+        <div class="form-group mt-2">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
