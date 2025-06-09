@@ -14,7 +14,7 @@ public class AccountController : Controller
             // Indicate here where Auth0 should redirect the user after a login.
             // Note that the resulting absolute Uri must be added to the
             // **Allowed Callback URLs** settings for the app.
-            .WithRedirectUri(returnUrl)
+            //.WithRedirectUri(returnUrl)
             .Build();
 
         await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
