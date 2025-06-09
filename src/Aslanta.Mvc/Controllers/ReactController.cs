@@ -5,7 +5,7 @@ namespace Aslanta.Mvc.Controllers
     [Route("react")]
     public class ReactController : Controller
     {
-        // GET: ReactController
+        [HttpGet("index")]
         public ActionResult Index()
         {
             return View();
@@ -14,7 +14,12 @@ namespace Aslanta.Mvc.Controllers
         [HttpGet("dynamic-forms")]
         public ActionResult DynamicForms()
         {
-            var data = new { Name = "Aslanta", Version = "1.0" };
+            return View();
+        }
+
+        [HttpGet("timeline")]
+        public ActionResult Timeline()
+        {
             return View();
         }
     }
