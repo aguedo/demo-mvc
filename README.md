@@ -1,4 +1,4 @@
-# Reedme
+# Readme
 
 A demo application for experimentation using ASP.NET Core MVC.
 
