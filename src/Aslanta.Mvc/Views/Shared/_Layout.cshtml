@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Aslanta.Mvc.styles.css" asp-append-version="true" />
+    @RenderSection("HeadContent", required: false)
 </head>
 
 <body>
@@ -38,6 +39,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="RequestStats"
                                 asp-action="Index">Stats</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Configs"
+                                asp-action="Index">Configs</a>
+                        </li>
+                        <li class="nav-item"></li>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="DemoAuth0"
+                            asp-action="Index">Auth0</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="~/swagger">Swagger</a>
                         </li>
                     </ul>
                 </div>
